@@ -112,6 +112,21 @@ public class AppController {
 			return "dologin";
 	}
 	
+	@RequestMapping("/loginUser")
+	public String verify(@RequestParam("userid") String userid,@RequestParam("password") String password,
+			HttpSession session, ModelMap model) {
+		
+		session.setAttribute("userid", userid);
+		
+		if(userService.findByUserIdAndPassword(userid, password)!= null) {
+			String username = userService.findByUserIdAndPassword(userid, password);
+			session.setAttribute(username, username);
+			return "adminHomePage";
+		}
+		else
+			session.setAttribute("error", "Invalid credentials");
+			return "login";
+	}
 	
 	@RequestMapping("/addProduct")
 	public String addProduct() {
@@ -132,16 +147,24 @@ public class AppController {
 	
 	@PostMapping("/AddProduct")
 	public @ResponseBody List<Product> addProduct(@RequestParam("quantity") String quantity,@RequestParam("productid") String productid,@RequestParam("productname") String productname,HttpSession session,HttpServletRequest request) {
-		session.setAttribute("productid", productid);
-		session.setAttribute("productname", productname);	
-		session.setAttribute("quantity", quantity);
+		List<Product> productList = (List<Product>) session.getAttribute("productList");
+		if (productList!= null) {
+			Product product = userService.saveMyProduct(quantity, productid, productname);
+			productList.add(product);
+			return productList;
+			
+	
+		}
+		else
+		{
 		Product product = userService.saveMyProduct(quantity, productid, productname);
 		session.setAttribute("product", product);
-		List<Product> productList = userService.listMyProduct(product);
-		session.setAttribute("productList", productList);
-		return productList;
+		session.getAttribute("productList");		
+		List<Product> productListnew = userService.listMyProduct(product);
+		session.setAttribute("productList", productListnew);
+		return productListnew;
 		
-
+		}
 		
 	}
 
