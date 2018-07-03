@@ -165,13 +165,13 @@ function populateTheGrid(operation,quantity,productid,productname){
 					console.log("Data inside of Populategrid ::success"+data);
 					var parsed = data;
 					//parsed = JSON.parse(parsed);
-					var taggedData=	"<tr> " +
+					var taggedData="<tr> " +
 					"<th>Quantity</th>" +
-					"<th>Product Id</th>" +
-					"<th>Product Name</th>" +
+					"<th>ProdId</th>" +
+					"<th>Item Name</th>" +
 					"<th>Delete </th>" +
 					"<th>Update</th>" +
-					"</tr>" ;
+					"</tr>";
 					console.log("populateTheGrid :: success"+parsed);
 					if(operation=='updateAdd')
 					{
@@ -179,17 +179,18 @@ function populateTheGrid(operation,quantity,productid,productname){
 						constructDataGrid(parsed);
 					}
 					else
+						
 						for (var index in data){
 							
+							console.log(data[index]);
 							taggedData += "<tr>" +
 							"<td>"+data[index].quantity+"</td>"+
 							"<td>"+data[index].productId+"</td>"
-							+"<td>"+data[index].productName+"</td>";
+							+"<td>"+data[index].productName+"</td>" +"</tr>";
 							
-							$("#instructionText").html(taggedData);
-							console.log(data[index]);
-							//constructGrid(data[index]);
+							
 						}
+						$("#instructionText").html(taggedData);
 						//constructDataGrid(parsed);
 	
 				},
@@ -212,7 +213,7 @@ function constructGrid(product){
 			"<th>Delete </th>" +
 			"<th>Update</th>" +
 			"</tr>";
-	$.each(product.productJSON,function(i, item){
+	$.each(product,function(i, item){
 		taggedData +="<tr>" +
 		"<td>"+item.quantity+"</td>"+
 		"<td>"+item.productid+"</td>"
